@@ -1,0 +1,24 @@
+# Secrets
+.env
+
+# Self-signed certs (regenerate with: python -c "from OpenSSL import crypto; ...")
+cert.pem
+key.pem
+
+# Test artifacts
+test_img.png
+test_out/
+output/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

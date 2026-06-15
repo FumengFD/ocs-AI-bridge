@@ -683,33 +683,33 @@ CONFIG_PAGE = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title
 'border:none;border-radius:6px;padding:10px 20px;font-size:14px;cursor:pointer;margin-top:16px}' + \
 '.msg{padding:10px;border-radius:6px;margin-top:12px;display:none}.ok{background:#f6ffed;color:#389e0d}' + \
 '.err{background:#fff2f0;color:#cf1322}</style></head><body><div class="card">' + \
-'<h1>ocs-AI-bridge</h1><h2>Select AI model and enter API Key</h2>' + \
-'<label>AI Model</label><select id="model">' + \
+'<h1>OCS-AI-Server</h1><h2>选择 AI 模型并输入 API Key</h2>' + \
+'<label>AI 模型</label><select id="model">' + \
 '<option value="deepseek-v4-flash|https://api.deepseek.com">DeepSeek V4 Flash</option>' + \
 '<option value="deepseek-v4-pro|https://api.deepseek.com">DeepSeek V4 Pro</option>' + \
 '<option value="gpt-4o|https://api.openai.com/v1">GPT-4o (OpenAI)</option>' + \
-'<option value="qwen-plus|https://dashscope.aliyuncs.com/compatible-mode/v1">Qwen-Plus</option>' + \
+'<option value="qwen-plus|https://dashscope.aliyuncs.com/compatible-mode/v1">Qwen-Plus（通义千问）</option>' + \
 '<option value="qwen-max|https://dashscope.aliyuncs.com/compatible-mode/v1">Qwen-Max</option>' + \
 '<option value="llama-3.3-70b-versatile|https://api.groq.com/openai/v1">Groq Llama 3.3</option>' + \
-'<option value="moonshot-v1-auto|https://api.moonshot.cn/v1">Moonshot V1</option>' + \
-'<option value="glm-4-flash|https://open.bigmodel.cn/api/paas/v4">GLM-4-Flash</option>' + \
-'<option value="glm-4-plus|https://open.bigmodel.cn/api/paas/v4">GLM-4-Plus</option></select>' + \
-'<label>API Key</label><input type="password" id="key" placeholder="Paste API Key">' + \
-'<label>Vision (optional)</label><input type="text" id="vision" placeholder="e.g. gpt-4o">' + \
-'<button onclick="save()">Save</button><div id="msg" class="msg"></div>' + \
+'<option value="moonshot-v1-auto|https://api.moonshot.cn/v1">Moonshot V1（月之暗面）</option>' + \
+'<option value="glm-4-flash|https://open.bigmodel.cn/api/paas/v4">GLM-4-Flash（智谱）</option>' + \
+'<option value="glm-4-plus|https://open.bigmodel.cn/api/paas/v4">GLM-4-Plus（智谱）</option></select>' + \
+'<label>API Key</label><input type="password" id="key" placeholder="粘贴 API Key">' + \
+'<label>视觉模型（可选）</label><input type="text" id="vision" placeholder="如 gpt-4o，留空则不用">' + \
+'<button onclick="save()">保存配置</button><div id="msg" class="msg"></div>' + \
 '<script>async function save(){' + \
 'var m=document.getElementById("model").value.split("|");' + \
 'var k=document.getElementById("key").value.trim();' + \
 'var v=document.getElementById("vision").value.trim();' + \
-'if(!k){var e=document.getElementById("msg");e.innerHTML="Enter a key";' + \
+'if(!k){var e=document.getElementById("msg");e.innerHTML="请输入 API Key";' + \
 'e.className="msg err";e.style.display="block";return}' + \
 'try{var r=await fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},' + \
 'body:JSON.stringify({model:m[0],base_url:m[1],key:k,vision:v})});' + \
 'var d=await r.json();var e=document.getElementById("msg");' + \
-'if(d.ok){e.innerHTML="Saved!";e.className="msg ok";e.style.display="block";' + \
+'if(d.ok){e.innerHTML="已保存！";e.className="msg ok";e.style.display="block";' + \
 'setTimeout(function(){location.reload()},1000)}' + \
 'else{e.innerHTML=d.error;e.className="msg err";e.style.display="block"}}' + \
-'catch(ex){e.innerHTML="Error: "+ex.message;e.className="msg err";e.style.display="block"}}' + \
+'catch(ex){e.innerHTML="错误："+ex.message;e.className="msg err";e.style.display="block"}}' + \
 '</script></body></html>'
 
 # -- App ----------------------------------------------------

@@ -293,13 +293,21 @@ async def detect_vision_capability():
     if not DEEPSEEK_API_KEY:
         return
 
-    # 用户已手动指定 → 不覆盖
+    # 已知多模态模型 → 直接跳过检测
+    KNOWN_VISION = {"gpt-4o", "gpt-4-turbo", "gpt-4.1", "claude-3", "claude-3.5",
+                    "claude-3.7", "claude-4", "gemini", "qwen-plus", "qwen-max",
+                    "qwen-vl", "qwq", "glm-4v", "glm-4-plus", "glm-4.5", "moonshot-v1-auto"}
+    if any(k in model_name.lower() for k in KNOWN_VISION):
+        VISION_CAPABLE = True
+        VISION_MODEL = VISION_MODEL or model_name
+        print(f"[init] {model_name} is vision-capable (known multimodal model)", file=sys.stderr, flush=True)
+        return
+
+    # 用户已手动指定 → 直接启用
     if VISION_MODEL:
         VISION_CAPABLE = True
         print(f"[init] Vision model: {VISION_MODEL} (user configured)", file=sys.stderr, flush=True)
         return
-
-    # 自动检测：用主模型试一张 1px 图
     print(f"[init] Testing if {DEEPSEEK_MODEL} supports vision...", file=sys.stderr, flush=True)
     try:
         client = get_ai()

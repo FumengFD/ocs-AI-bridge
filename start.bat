@@ -25,10 +25,29 @@ if "%PYTHON%"=="" (
     where python >nul 2>&1 && python --version >nul 2>&1 && set PYTHON=python
 )
 if "%PYTHON%"=="" (
-    echo [FAIL] Python not found. Download from python.org
-    pause
-    exit /b 1
+    echo [FAIL] Python not found.
+    where winget >nul 2>&1 && (
+        echo [INFO] Installing Python via winget...
+        winget install -e --id Python.Python.3.11 --silent >nul 2>&1
+        if errorlevel 1 goto no_python
+        echo [ OK ] Python installed via winget
+        set PYTHON=python
+        goto after_python
+    )
 )
+if "%PYTHON%"=="" (
+    goto no_python
+)
+goto after_python
+
+:no_python
+echo [FAIL] Python not found.
+echo Download from: https://www.python.org/downloads/
+echo Then re-run start.bat
+pause
+exit /b 1
+
+:after_python
 echo [ OK ] Python
 
 REM .env
@@ -52,7 +71,7 @@ if not "%K%"=="" (
 echo.
 :after_key
 
-REM Certs - auto generate if missing
+REM Cert - auto generate if missing
 if exist "cert.pem" if exist "key.pem" goto certs_ok
 echo [INFO] Generating HTTPS cert...
 %PYTHON% -c "from cryptography import x509;from cryptography.x509.oid import NameOID;from cryptography.hazmat.primitives import hashes,serialization;from cryptography.hazmat.primitives.asymmetric import rsa;import datetime,ipaddress;key=rsa.generate_private_key(public_exponent=65537,key_size=2048);subj=x509.Name([x509.NameAttribute(NameOID.COMMON_NAME,'localhost')]);cert=x509.CertificateBuilder().subject_name(subj).issuer_name(subj).public_key(key.public_key()).serial_number(1000).not_valid_before(datetime.datetime.utcnow()).not_valid_after(datetime.datetime.utcnow()+datetime.timedelta(days=365)).add_extension(x509.SubjectAlternativeName([x509.DNSName('localhost'),x509.IPAddress(ipaddress.IPv4Address('127.0.0.1'))]),critical=False).sign(key,hashes.SHA256());open('cert.pem','wb').write(cert.public_bytes(serialization.Encoding.PEM));open('key.pem','wb').write(key.private_bytes(serialization.Encoding.PEM,serialization.PrivateFormat.TraditionalOpenSSL,serialization.NoEncryption()));print('done')" >nul 2>&1
@@ -61,9 +80,9 @@ echo [INFO] Generating HTTPS cert...
 if exist "cert.pem" if exist "key.pem" (
     echo [ OK ] HTTPS certs
     certutil -user -addstore Root cert.pem >nul 2>&1
-    if not errorlevel 1 echo [ OK ] Cert trusted by system
+    if not errorlevel 1 echo [ OK ] Cert trusted
 ) else (
-    %PYTHON% -m pip install pyOpenSSL cryptography >nul 2>&1 && echo [ OK ] pyOpenSSL installed || echo [WARN] pyOpenSSL install failed
+    %PYTHON% -m pip install pyOpenSSL cryptography >nul 2>&1 || echo [WARN] Cert generation may fail
 )
 
 REM Core deps
@@ -72,7 +91,7 @@ if errorlevel 1 (
     echo [INFO] Installing dependencies...
     %PYTHON% -m pip install -r requirements.txt
     if errorlevel 1 (
-        echo [FAIL] pip install failed. Try manually: pip install -r requirements.txt
+        echo [FAIL] pip install failed. Try: pip install -r requirements.txt
         pause
         exit /b 1
     )
@@ -93,7 +112,6 @@ echo.
 echo === Starting server ===
 echo.
 
-REM Kill old processes
 for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":8865.*LISTENING" 2^>nul') do (
     taskkill /PID %%a /F 2>nul
 )

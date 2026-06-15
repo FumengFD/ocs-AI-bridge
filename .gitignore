@@ -10,10 +10,10 @@ test_img.png
 test_out/
 output/
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
+# PyInstaller build
+dist/
+build/
+*.spec
 
 # IDE
 .vscode/

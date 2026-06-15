@@ -7,7 +7,10 @@ echo   ocs-AI-bridge
 echo ============================================
 echo.
 
-REM Find Python
+REM Find Python (or standalone exe)
+set USE_EXE=
+if exist "%~dp0dist\ocs-server.exe" set USE_EXE=1
+if not "%USE_EXE%"=="" goto after_python
 set PYTHON=
 where python >nul 2>&1 && python --version >nul 2>&1 && set PYTHON=python
 if "%PYTHON%"=="" where py >nul 2>&1 && set PYTHON=py -3
@@ -44,7 +47,11 @@ pause
 exit /b 1
 
 :after_python
-echo [ OK ] Python
+if not "%USE_EXE%"=="" (
+    echo [ OK ] Standalone executable
+) else (
+    echo [ OK ] Python
+)
 
 REM .env
 if not exist ".env" goto ask_key
@@ -145,5 +152,9 @@ echo.
 for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":8865.*LISTENING" 2^>nul') do ( taskkill /PID %%a /F 2>nul )
 timeout /t 1 /nobreak >nul
 
-%PYTHON% ocs_server.py
+if not "%USE_EXE%"=="" (
+    dist\ocs-server.exe
+) else (
+    %PYTHON% ocs_server.py
+)
 pause

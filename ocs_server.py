@@ -664,6 +664,13 @@ async def save_config(request):
         os.environ["DEEPSEEK_API_KEY"] = k
         os.environ["DEEPSEEK_BASE_URL"] = u
         os.environ["DEEPSEEK_MODEL"] = m
+        global DEEPSEEK_MODEL, DEEPSEEK_BASE_URL
+        DEEPSEEK_MODEL = m
+        DEEPSEEK_BASE_URL = u
+        if v:
+            os.environ["VISION_MODEL"] = v
+            global VISION_MODEL
+            VISION_MODEL = v
         # 生成证书（如没有）
         if not os.path.exists("cert.pem") or not os.path.exists("key.pem"):
             try:

@@ -297,10 +297,10 @@ async def detect_vision_capability():
     KNOWN_VISION = {"gpt-4o", "gpt-4-turbo", "gpt-4.1", "claude-3", "claude-3.5",
                     "claude-3.7", "claude-4", "gemini", "qwen-plus", "qwen-max",
                     "qwen-vl", "qwq", "glm-4v", "glm-4-plus", "glm-4.5", "moonshot-v1-auto"}
-    if any(k in model_name.lower() for k in KNOWN_VISION):
+    if any(k in DEEPSEEK_MODEL.lower() for k in KNOWN_VISION):
         VISION_CAPABLE = True
-        VISION_MODEL = VISION_MODEL or model_name
-        print(f"[init] {model_name} is vision-capable (known multimodal model)", file=sys.stderr, flush=True)
+        VISION_MODEL = VISION_MODEL or DEEPSEEK_MODEL
+        print(f"[init] {DEEPSEEK_MODEL} is vision-capable (known multimodal model)", file=sys.stderr, flush=True)
         return
 
     # 用户已手动指定 → 直接启用

@@ -832,8 +832,9 @@ if __name__ == "__main__":
     # 自动检测模型多模态能力
     asyncio.run(detect_vision_capability())
 
-    # 尝试后台启动 MinerU API
-    asyncio.run(ensure_mineru_api())
+    # 后台尝试启动 MinerU API（不阻塞）
+    import threading
+    threading.Thread(target=lambda: asyncio.run(ensure_mineru_api()), daemon=True).start()
 
     uvicorn.run(
         app,

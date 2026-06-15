@@ -13,6 +13,7 @@ output/
 # PyInstaller build
 dist/
 build/
+build_env/
 *.spec
 
 # IDE

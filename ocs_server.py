@@ -683,12 +683,17 @@ CONFIG_PAGE = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title
 'border:none;border-radius:6px;padding:10px 20px;font-size:14px;cursor:pointer;margin-top:16px}' + \
 '.msg{padding:10px;border-radius:6px;margin-top:12px;display:none}.ok{background:#f6ffed;color:#389e0d}' + \
 '.err{background:#fff2f0;color:#cf1322}</style></head><body><div class="card">' + \
-'<h1>ocs-AI-bridge</h1><h2>Configure AI model</h2>' + \
+'<h1>ocs-AI-bridge</h1><h2>Select AI model and enter API Key</h2>' + \
 '<label>AI Model</label><select id="model">' + \
 '<option value="deepseek-v4-flash|https://api.deepseek.com">DeepSeek V4 Flash</option>' + \
-'<option value="gpt-4o|https://api.openai.com/v1">GPT-4o</option>' + \
+'<option value="deepseek-v4-pro|https://api.deepseek.com">DeepSeek V4 Pro</option>' + \
+'<option value="gpt-4o|https://api.openai.com/v1">GPT-4o (OpenAI)</option>' + \
 '<option value="qwen-plus|https://dashscope.aliyuncs.com/compatible-mode/v1">Qwen-Plus</option>' + \
-'<option value="glm-4-flash|https://open.bigmodel.cn/api/paas/v4">GLM-4-Flash</option></select>' + \
+'<option value="qwen-max|https://dashscope.aliyuncs.com/compatible-mode/v1">Qwen-Max</option>' + \
+'<option value="llama-3.3-70b-versatile|https://api.groq.com/openai/v1">Groq Llama 3.3</option>' + \
+'<option value="moonshot-v1-auto|https://api.moonshot.cn/v1">Moonshot V1</option>' + \
+'<option value="glm-4-flash|https://open.bigmodel.cn/api/paas/v4">GLM-4-Flash</option>' + \
+'<option value="glm-4-plus|https://open.bigmodel.cn/api/paas/v4">GLM-4-Plus</option></select>' + \
 '<label>API Key</label><input type="password" id="key" placeholder="Paste API Key">' + \
 '<label>Vision (optional)</label><input type="text" id="vision" placeholder="e.g. gpt-4o">' + \
 '<button onclick="save()">Save</button><div id="msg" class="msg"></div>' + \

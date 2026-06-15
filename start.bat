@@ -33,7 +33,16 @@ echo [INFO] Installing Python via winget...
 winget install -e --id Python.Python.3.11 --silent
 if errorlevel 1 goto no_python
 echo [ OK ] Python installed via winget
-set PYTHON=python
+REM Re-detect Python path (winget doesn't update PATH)
+set PYTHON=
+for %%p in (
+    "%LOCALAPPDATA%\Programs\Python\Python313\python.exe"
+    "%LOCALAPPDATA%\Programs\Python\Python312\python.exe"
+    "%LOCALAPPDATA%\Programs\Python\Python311\python.exe"
+    "%LOCALAPPDATA%\Programs\Python\Python310\python.exe"
+) do if exist "%%~p" set PYTHON=%%~p
+if "%PYTHON%"=="" where py >nul 2>&1 && set PYTHON=py -3
+if "%PYTHON%"=="" goto no_python
 goto after_python
 
 :no_python

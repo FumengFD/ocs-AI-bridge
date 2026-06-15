@@ -64,12 +64,62 @@ goto after_key
 
 :ask_key
 echo.
+echo Select your AI model:
+echo.
+echo  1) DeepSeek V4 Flash  (default, fast/cheap)
+echo     API: api.deepseek.com / model: deepseek-v4-flash
+echo.
+echo  2) DeepSeek V4 Pro  (more accurate)
+echo     API: api.deepseek.com / model: deepseek-v4-pro
+echo.
+echo  3) OpenAI GPT-4o  (multimodal, no MinerU needed)
+echo     API: api.openai.com/v1 / model: gpt-4o
+echo.
+echo  4) Qwen-Plus  (通义千问)
+echo     API: dashscope.aliyuncs.com/compatible-mode/v1 / model: qwen-plus
+echo.
+echo  5) Qwen-Max  (通义千问, stronger)
+echo     API: dashscope.aliyuncs.com/compatible-mode/v1 / model: qwen-max
+echo.
+echo  6) Groq Llama 3.3  (fast open-source)
+echo     API: api.groq.com/openai/v1 / model: llama-3.3-70b-versatile
+echo.
+echo  7) Moonshot V1  (月之暗面)
+echo     API: api.moonshot.cn/v1 / model: moonshot-v1-auto
+echo.
+echo  8) GLM-4-Flash  (智谱, fast/cheap)
+echo     API: open.bigmodel.cn/api/paas/v4 / model: glm-4-flash
+echo.
+echo  9) GLM-4-Plus  (智谱, stronger)
+echo     API: open.bigmodel.cn/api/paas/v4 / model: glm-4-plus
+echo.
+echo Enter number (1-9, default=1):
+set /p MODEL_NUM="> "
+if "%MODEL_NUM%"=="" set MODEL_NUM=1
+
+for %%a in (1 2 3 4 5 6 7 8 9) do if "%MODEL_NUM%"=="%%a" set MODEL_VALID=1
+if "%MODEL_VALID%"=="" set MODEL_NUM=1
+
+set API_KEY=
+if "%MODEL_NUM%"=="1" set BASE_URL=https://api.deepseek.com&set MODEL=deepseek-v4-flash
+if "%MODEL_NUM%"=="2" set BASE_URL=https://api.deepseek.com&set MODEL=deepseek-v4-pro
+if "%MODEL_NUM%"=="3" set BASE_URL=https://api.openai.com/v1&set MODEL=gpt-4o
+if "%MODEL_NUM%"=="4" set BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1&set MODEL=qwen-plus
+if "%MODEL_NUM%"=="5" set BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1&set MODEL=qwen-max
+if "%MODEL_NUM%"=="6" set BASE_URL=https://api.groq.com/openai/v1&set MODEL=llama-3.3-70b-versatile
+if "%MODEL_NUM%"=="7" set BASE_URL=https://api.moonshot.cn/v1&set MODEL=moonshot-v1-auto
+if "%MODEL_NUM%"=="8" set BASE_URL=https://open.bigmodel.cn/api/paas/v4&set MODEL=glm-4-flash
+if "%MODEL_NUM%"=="9" set BASE_URL=https://open.bigmodel.cn/api/paas/v4&set MODEL=glm-4-plus
+
+echo.
+echo Selected: %MODEL%
 echo Paste your API key (right-click or Ctrl+V, then Enter):
-echo Example: sk-your-key-here
 set /p K="> "
 if not "%K%"=="" (
     echo DEEPSEEK_API_KEY=%K%> .env
-    echo [ OK ] API key saved
+    echo DEEPSEEK_BASE_URL=%BASE_URL%>> .env
+    echo DEEPSEEK_MODEL=%MODEL%>> .env
+    echo [ OK ] API key saved for %MODEL%
 ) else (
     echo [WARN] No key entered
 )

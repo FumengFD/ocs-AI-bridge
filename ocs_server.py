@@ -642,10 +642,6 @@ async def search(request):
         })
 
 
-async def config_page(request):
-    from starlette.responses import HTMLResponse
-    return HTMLResponse(CONFIG_PAGE)
-
 async def save_config(request):
     from starlette.responses import JSONResponse
     try:
@@ -742,6 +738,29 @@ CONFIG_PAGE = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title
 'catch(ex){e.innerHTML="错误："+ex.message;e.className="msg err";e.style.display="block"}}' + \
 '</script></body></html>'
 
+CONFIG_HOME = '<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title>OCS-AI-Server</title>' + \
+'<style>*{margin:0;padding:0}body{font-family:sans-serif;background:#f5f5f5;padding:20px;max-width:700px;margin:0 auto}' + \
+'.card{background:#fff;border-radius:8px;padding:24px;margin-top:16px}' + \
+'h1{font-size:20px}h2{font-size:14px;color:#666;font-weight:400;margin:4px 0 16px}' + \
+'h3{font-size:15px;margin:16px 0 8px}pre{background:#f6f8fa;padding:14px;border-radius:6px;font-size:13px;overflow-x:auto;margin:8px 0;white-space:pre-wrap}' + \
+'.ok{background:#f6ffed;color:#389e0d;padding:12px 16px;border-radius:6px;margin:8px 0;border:1px solid #b7eb8f}' + \
+'.step{background:#f0f5ff;border-left:3px solid #1677ff;padding:10px 14px;margin:8px 0;border-radius:0 6px 6px 0;font-size:14px}' + \
+'a{color:#1677ff}</style></head><body><div class="card">' + \
+'<h1>OCS-AI-Server</h1>' + \
+'<h2>配置完成！在 OCS 中粘贴以下 JSON：</h2>' + \
+'<div class="ok">当前模型：<strong>' + DEEPSEEK_MODEL + '</strong></div>' + \
+'<pre>[{ "name": "OCS-AI", "url": "https://localhost:8865/search", "method": "post", "type": "fetch", "contentType": "json", "data": { "question": "${title}", "options": "${options}", "type": "${type}" }, "handler": "return (res)=>res.answer.allAnswer.map(i=>([res.question,i.join(\'#\')]))" }]</pre>' + \
+'<div class="step">1. 安装 <a href="https://docs.ocsjs.com/docs/script" target="_blank">ScriptCat + OCS 脚本</a></div>' + \
+'<div class="step">2. OCS 面板 → 通用 → 全局设置 → 题库配置 → 粘贴上方 JSON</div>' + \
+'<div class="step">3. 解析器选 <strong>默认</strong> → 保存 → 进入答题页面</div>' + \
+'</div></body></html>'
+
+async def config_page_route(request):
+    from starlette.responses import HTMLResponse
+    if os.path.exists(".env") and os.getenv("DEEPSEEK_API_KEY", ""):
+        return HTMLResponse(CONFIG_HOME)
+    return HTMLResponse(CONFIG_PAGE)
+
 # -- App ----------------------------------------------------
 
 routes = [
@@ -750,7 +769,7 @@ routes = [
     Route("/adapter-service/search", search, methods=["POST", "OPTIONS"]),
     Route("/api/search", search, methods=["POST", "OPTIONS"]),
     Route("/search", search, methods=["POST", "OPTIONS"]),
-    Route("/", config_page, methods=["GET"]),
+    Route("/", config_page_route, methods=["GET"]),
     Route("/api/save", save_config, methods=["POST"]),
     Route("/api/status", api_status, methods=["GET"]),
 ]

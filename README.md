@@ -2,7 +2,6 @@
 
 双击 `ocs-server.exe`，浏览器自动弹出配置页面——选 AI 模型、粘贴 API Key、保存。然后把 OCS JSON 配置复制到 OCS 题库配置，进入答题页面即可自动答题。
 
-
 ## 支持的题型
 
 - 单选题 / 多选题 / 判断题
@@ -90,6 +89,7 @@ name = "ocs-bridge"
 type = "http"
 url  = "http://localhost:8865/mcp"
 ```
+#已知bug：连线题OCS不能正确输出选项导致无法获取题目选项.
 
 ## License
 

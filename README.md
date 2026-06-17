@@ -89,7 +89,7 @@ name = "ocs-bridge"
 type = "http"
 url  = "http://localhost:8865/mcp"
 ```
-#已知bug：连线题OCS不能正确输出选项导致无法获取题目选项.
+# 已知bug：连线题OCS不能正确输出选项导致无法获取题目选项.
 
 ## License
 
